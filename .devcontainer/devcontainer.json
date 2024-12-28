@@ -1,15 +1,34 @@
 {
   "name": "Kaggle Python Environment",
-  "image": "gcr.io/kaggle-gpu-images/python",
-  "workspaceFolder": "/workspace",
-  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
-  "settings": {
-    "python.pythonPath": "/usr/bin/python3",
-    "editor.formatOnSave": true
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "BASE_IMAGE": "gcr.io/kaggle-gpu-images/python",
+      "BASE_IMAGE_TAG": "latest",
+      "CUDA_MAJOR_VERSION": "12",
+      "CUDA_MINOR_VERSION": "4"
+    }
   },
-  "extensions": [
-    "ms-python.python",
-    "ms-toolsai.jupyter"
-  ],
-  "postCreateCommand": "pip install -r requirements.txt || true"
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=/home/ubuntu/ca-anomaly,target=/workspace,type=bind,consistency=cached",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "python.pythonPath": "/usr/bin/python3",
+        "editor.formatOnSave": true
+      },
+      "extensions": [
+        "ms-python.python",
+        "ms-toolsai.jupyter"
+      ]
+    }
+  },
+  "runArgs": ["--gpus", "all"],
+  "remoteEnv": {
+    "PYTHONPATH": "/workspace",
+    "CUDA_HOME": "/usr/local/cuda"
+  },
+  "postCreateCommand": "pip install -r requirements.txt || true",
+  "shutdownAction": "stopContainer",
+  "remoteUser": "ubuntu"
 }
