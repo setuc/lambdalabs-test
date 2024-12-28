@@ -14,7 +14,8 @@
   "customizations": {
     "vscode": {
       "settings": {
-        "python.pythonPath": "/usr/bin/python3",
+        "python.defaultInterpreterPath": "/workspace/venv/bin/python",
+        "python.pythonPath": "/workspace/venv/bin/python",
         "editor.formatOnSave": true
       },
       "extensions": [
@@ -23,12 +24,16 @@
       ]
     }
   },
-  "runArgs": ["--gpus", "all"],
+  "runArgs": [
+    "--gpus",
+    "all"
+  ],
   "remoteEnv": {
     "PYTHONPATH": "/workspace",
-    "CUDA_HOME": "/usr/local/cuda"
+    "CUDA_HOME": "/usr/local/cuda",
+    "VIRTUAL_ENV": "/workspace/venv"
   },
-  "postCreateCommand": "pip install -r requirements.txt || true",
+  "postCreateCommand": "uv pip install -r requirements.txt || true",
   "shutdownAction": "stopContainer",
   "remoteUser": "ubuntu"
 }
